@@ -94,7 +94,7 @@ const IDCard = ({ data }: { data: UserData }) => {
       </div>
 
       {/* Main Info Body */}
-      <div className="mt-6 pl-3 pr-5 relative h-[180px]">
+      <div className="mt-2 pl-3 pr-5 relative h-[180px]">
           {/* Exact Watermark "NMU" */}
           <div 
             className="absolute top-[35%] left-[48%] -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none z-0 rotate-[-25deg]"
@@ -108,7 +108,7 @@ const IDCard = ({ data }: { data: UserData }) => {
           </div>
 
           {/* Fields - Exact Labels and Layout */}
-          <div className="flex flex-col gap-1.5 relative z-10">
+          <div className="flex flex-col gap-1 relative z-10">
             <div className="flex items-start">
               <span className="w-[82px] font-black text-[15px] text-black shrink-0 tracking-tight">NAME:</span>
               <span className="text-[15px] font-black text-black uppercase break-words pr-2 tracking-tight">{data.name || ''}</span>
