@@ -3,7 +3,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Upload, Download, Printer, User, Binary, School, BookOpen, MapPin, RefreshCw, CheckCircle, FileImage, FileText, ChevronDown } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import { toPng } from 'html-to-image';
+import { toPng, toJpeg } from 'html-to-image';
 import { jsPDF } from 'jspdf';
 
 // --- Types ---
@@ -233,6 +233,27 @@ export default function App() {
     }
   };
 
+  const handleExportJpeg = async () => {
+    const element = document.getElementById('printable-id-card');
+    if (!element) return;
+    
+    try {
+      const dataUrl = await toJpeg(element, { 
+        quality: 1.0, 
+        pixelRatio: 4,
+        backgroundColor: '#ffffff'
+      });
+      const link = document.createElement('a');
+      link.download = `${data.name.replace(/\s+/g, '_')}_ID_Card.jpg`;
+      link.href = dataUrl;
+      link.click();
+      setShowExportOptions(false);
+      handleComplete();
+    } catch (err) {
+      console.error('JPEG Export failed', err);
+    }
+  };
+
   const handleExportPdf = async () => {
     const element = document.getElementById('printable-id-card');
     if (!element) return;
@@ -304,6 +325,13 @@ export default function App() {
                     >
                       <FileImage className="w-4 h-4" />
                       Save as PNG
+                    </button>
+                    <button
+                      onClick={handleExportJpeg}
+                      className="w-full flex items-center gap-3 px-3 py-2 text-sm font-bold text-[#2D1B69] hover:bg-[#2D1B69]/5 rounded-xl transition-colors"
+                    >
+                      <FileImage className="w-4 h-4" />
+                      Save as JPEG
                     </button>
                     <button
                       onClick={handleExportPdf}
