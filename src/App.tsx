@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Upload, Download, Printer, User, Binary, School, BookOpen, MapPin, RefreshCw, CheckCircle, FileImage, FileText, ChevronDown, Share2 } from 'lucide-react';
+import { Upload, Download, Printer, User, Binary, School, BookOpen, MapPin, RefreshCw, CheckCircle, FileImage, FileText, ChevronDown } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { toPng } from 'html-to-image';
 import { jsPDF } from 'jspdf';
@@ -14,6 +14,7 @@ interface UserData {
   matNo: string;
   dept: string;
   faculty: string;
+  validTill: string;
   passport: string | null;
   signature: string | null;
   logo: string | null;
@@ -26,6 +27,7 @@ const INITIAL_DATA: UserData = {
   matNo: "NMU/2018/1234",
   dept: "MARINE ENGINEERING",
   faculty: "ENGINEERING",
+  validTill: "2024",
   passport: null,
   signature: null,
   logo: null,
@@ -78,8 +80,8 @@ const IDCard = ({ data }: { data: UserData }) => {
       </div>
 
       {/* Passport Area - Exact placement */}
-      <div className="flex justify-center mt-2">
-        <div className="w-[148px] h-[148px] bg-[#1e1464] border-[1px] border-black flex items-center justify-center">
+      <div className="flex justify-center mt-2 relative">
+        <div className="w-[165px] h-[165px] bg-[#1e1464] border-[1px] border-black flex items-center justify-center">
           {data.passport ? (
              <img 
                src={data.passport} 
@@ -91,13 +93,19 @@ const IDCard = ({ data }: { data: UserData }) => {
              <span className="text-white/50 text-sm font-bold uppercase">Passport</span>
           )}
         </div>
+
+        {/* Valid Till - Placed to the right of passport, vertical along edge */}
+        <div className="absolute right-[-50px] top-1/2 -translate-y-1/2 rotate-[90deg] flex items-center gap-2 z-20 w-[200px] justify-center">
+          <span className="text-[18px] font-black text-[#1e1464] tracking-widest uppercase whitespace-nowrap">VALID TILL</span>
+          <span className="text-[18px] font-black text-[#1e1464] leading-none whitespace-nowrap">{data.validTill || ''}</span>
+        </div>
       </div>
 
       {/* Main Info Body */}
       <div className="mt-2 pl-3 pr-5 relative h-[180px]">
           {/* Exact Watermark "NMU" */}
           <div 
-            className="absolute top-[35%] left-[48%] -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none z-0 rotate-[-25deg]"
+            className="absolute top-[42%] left-[48%] -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none z-0 rotate-[-25deg]"
           >
             <span 
               className="font-black text-[#0a1d6e] opacity-[0.46]" 
@@ -135,15 +143,15 @@ const IDCard = ({ data }: { data: UserData }) => {
       {/* Bottom Area: QR and Footer */}
       <div className="absolute bottom-0 left-0 w-full">
         {/* QR Code Container - Exact as template */}
-        <div className="absolute bottom-10 right-2 z-20 w-[105px] h-[105px] flex items-center justify-center">
+        <div className="absolute bottom-10 right-2 z-20 w-[107px] h-[107px] flex items-center justify-center">
            {data.qrContent ? (
               <QRCodeSVG 
                 value={data.qrContent}
-                size={105}
+                size={107}
                 level="M"
               />
            ) : (
-              <div className="w-[105px] h-[105px] flex items-center justify-center text-[10px] font-bold text-center">QR code</div>
+              <div className="w-[107px] h-[107px] flex items-center justify-center text-[10px] font-bold text-center">QR code</div>
            )}
         </div>
 
@@ -173,9 +181,7 @@ export default function App() {
   const [data, setData] = useState<UserData>(INITIAL_DATA);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showExportOptions, setShowExportOptions] = useState(false);
-  const [showShareOptions, setShowShareOptions] = useState(false);
   const exportMenuRef = useRef<HTMLDivElement>(null);
-  const shareMenuRef = useRef<HTMLDivElement>(null);
   const passportInputRef = useRef<HTMLInputElement>(null);
   const logoInputRef = useRef<HTMLInputElement>(null);
   const signatureInputRef = useRef<HTMLInputElement>(null);
@@ -184,9 +190,6 @@ export default function App() {
     const handleClickOutside = (event: MouseEvent) => {
       if (exportMenuRef.current && !exportMenuRef.current.contains(event.target as Node)) {
         setShowExportOptions(false);
-      }
-      if (shareMenuRef.current && !shareMenuRef.current.contains(event.target as Node)) {
-        setShowShareOptions(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -254,69 +257,6 @@ export default function App() {
     }
   };
 
-  const handleSharePng = async () => {
-    const element = document.getElementById('printable-id-card');
-    if (!element) return;
-    
-    try {
-      const dataUrl = await toPng(element, { 
-        quality: 1.0, 
-        pixelRatio: 4,
-        backgroundColor: '#ffffff'
-      });
-      
-      const blob = await (await fetch(dataUrl)).blob();
-      const file = new File([blob], `${data.name.replace(/\s+/g, '_')}_ID_Card.png`, { type: blob.type });
-
-      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({
-          files: [file],
-          title: 'NMU ID Card',
-          text: `Cadet ID Card for ${data.name}`
-        });
-      } else {
-        alert('Sharing is not supported on this browser/device for files. Try exporting instead.');
-      }
-      setShowShareOptions(false);
-    } catch (err) {
-      console.error('PNG Share failed', err);
-    }
-  };
-
-  const handleSharePdf = async () => {
-    const element = document.getElementById('printable-id-card');
-    if (!element) return;
-
-    try {
-      const dataUrl = await toPng(element, { 
-        quality: 1.0, 
-        pixelRatio: 4,
-        backgroundColor: '#ffffff'
-      });
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
-        format: [85, 135]
-      });
-      pdf.addImage(dataUrl, 'PNG', 0, 0, 85, 135);
-      const pdfBlob = pdf.output('blob');
-      const file = new File([pdfBlob], `${data.name.replace(/\s+/g, '_')}_ID_Card.pdf`, { type: 'application/pdf' });
-
-      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({
-          files: [file],
-          title: 'NMU ID Card',
-          text: `Cadet ID Card for ${data.name}`
-        });
-      } else {
-        alert('Sharing is not supported on this browser/device for files. Try exporting instead.');
-      }
-      setShowShareOptions(false);
-    } catch (err) {
-      console.error('PDF Share failed', err);
-    }
-  };
-
   const handleComplete = () => {
     setShowSuccess(true);
     confetti({
@@ -339,46 +279,6 @@ export default function App() {
           <h1 className="font-bold text-xl tracking-tight hidden sm:block">NMU ID Generator</h1>
         </div>
         <div className="flex gap-2 relative">
-          {/* Share Dropdown */}
-          <div className="relative" ref={shareMenuRef}>
-            <button 
-             onClick={() => setShowShareOptions(!showShareOptions)}
-             className="flex items-center gap-2 px-4 py-2 rounded-full font-semibold text-sm bg-white border border-[#2D1B69]/20 hover:bg-gray-50 transition-all active:scale-95 shadow-sm"
-            >
-              <Share2 className="w-4 h-4" />
-              Share
-              <ChevronDown className={`w-4 h-4 transition-transform ${showShareOptions ? 'rotate-180' : ''}`} />
-            </button>
-
-            <AnimatePresence>
-              {showShareOptions && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                  className="absolute left-0 mt-2 w-48 bg-white rounded-2xl shadow-xl border border-[#2D1B69]/10 overflow-hidden z-[60]"
-                >
-                  <div className="p-2 space-y-1">
-                    <button
-                      onClick={handleSharePng}
-                      className="w-full flex items-center gap-3 px-3 py-2 text-sm font-bold text-[#2D1B69] hover:bg-[#2D1B69]/5 rounded-xl transition-colors"
-                    >
-                      <FileImage className="w-4 h-4" />
-                      Share as PNG
-                    </button>
-                    <button
-                      onClick={handleSharePdf}
-                      className="w-full flex items-center gap-3 px-3 py-2 text-sm font-bold text-[#2D1B69] hover:bg-[#2D1B69]/5 rounded-xl transition-colors"
-                    >
-                      <FileText className="w-4 h-4" />
-                      Share as PDF
-                    </button>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
           <div className="relative" ref={exportMenuRef}>
             <button 
              onClick={() => setShowExportOptions(!showExportOptions)}
@@ -624,6 +524,19 @@ export default function App() {
                       value={data.faculty}
                       onChange={handleInputChange}
                       placeholder="e.g. Engineering"
+                      className="w-full bg-white border border-[#2D1B69]/10 p-3.5 rounded-xl font-bold focus:outline-none focus:ring-2 focus:ring-[#2D1B69]/20 shadow-sm"
+                    />
+                 </div>
+
+                 <div className="space-y-1">
+                    <label className="text-[10px] uppercase font-black text-[#2D1B69] tracking-widest flex items-center gap-1.5 ml-1">
+                      <CheckCircle className="w-3 h-3" /> Valid Till
+                    </label>
+                    <input 
+                      name="validTill"
+                      value={data.validTill}
+                      onChange={handleInputChange}
+                      placeholder="e.g. 2024"
                       className="w-full bg-white border border-[#2D1B69]/10 p-3.5 rounded-xl font-bold focus:outline-none focus:ring-2 focus:ring-[#2D1B69]/20 shadow-sm"
                     />
                  </div>
