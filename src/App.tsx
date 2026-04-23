@@ -156,7 +156,7 @@ const IDCard = ({ data }: { data: UserData }) => {
         </div>
 
         {/* Signature Area */}
-        <div className="absolute bottom-[35px] left-[50%] -translate-x-1/2 w-[360px] h-[50px] flex items-center justify-center p-1 z-30">
+        <div className="absolute bottom-[35px] left-[50%] -translate-x-1/2 w-[330px] h-[47px] flex items-center justify-center p-1 z-30">
           {data.signature && (
             <img 
               src={data.signature} 
