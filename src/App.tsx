@@ -80,8 +80,8 @@ const IDCard = ({ data }: { data: UserData }) => {
       </div>
 
       {/* Passport Area - Exact placement */}
-      <div className="flex justify-center mt-2 relative">
-        <div className="w-[165px] h-[165px] bg-[#1e1464] border-[1px] border-black flex items-center justify-center">
+      <div className="flex justify-center mt-1 relative">
+        <div className="w-[190px] h-[190px] bg-[#1e1464] border-[1px] border-black flex items-center justify-center">
           {data.passport ? (
              <img 
                src={data.passport} 
@@ -102,7 +102,7 @@ const IDCard = ({ data }: { data: UserData }) => {
       </div>
 
       {/* Main Info Body */}
-      <div className="mt-2 pl-3 pr-5 relative h-[180px]">
+      <div className="mt-0.5 pl-3 pr-5 relative h-[180px]">
           {/* Exact Watermark "NMU" */}
           <div 
             className="absolute top-[42%] left-[48%] -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none z-0 rotate-[-25deg]"
@@ -116,25 +116,25 @@ const IDCard = ({ data }: { data: UserData }) => {
           </div>
 
           {/* Fields - Exact Labels and Layout */}
-          <div className="flex flex-col gap-1 relative z-10">
+          <div className="flex flex-col gap-[1.8px] relative z-10">
             <div className="flex items-start">
-              <span className="w-[82px] font-black text-[15px] text-black shrink-0 tracking-tight">NAME:</span>
+              <span className="w-[80px] font-black text-[15px] text-black shrink-0 tracking-tight">NAME:</span>
               <span className="text-[15px] font-black text-black uppercase break-words pr-2 tracking-tight">{data.name || ''}</span>
             </div>
             <div className="flex items-start">
-              <span className="w-[82px] font-black text-[15px] text-black shrink-0 tracking-tight">GENDER:</span>
+              <span className="w-[80px] font-black text-[15px] text-black shrink-0 tracking-tight">GENDER:</span>
               <span className="text-[15px] font-black text-black uppercase tracking-tight">{data.gender || ''}</span>
             </div>
             <div className="flex items-start">
-              <span className="w-[82px] font-black text-[15px] text-black shrink-0 tracking-tight">MAT NO:</span>
+              <span className="w-[80px] font-black text-[15px] text-black shrink-0 tracking-tight">MAT NO:</span>
               <span className="text-[15px] font-black text-black uppercase tracking-tight">{data.matNo || ''}</span>
             </div>
             <div className="flex items-start">
-              <span className="w-[82px] font-black text-[15px] text-black shrink-0 tracking-tight">DEPT:</span>
+              <span className="w-[80px] font-black text-[15px] text-black shrink-0 tracking-tight">DEPT:</span>
               <span className="text-[15px] font-black text-black uppercase leading-[1.2] tracking-tight">{data.dept || ''}</span>
             </div>
             <div className="flex items-start">
-              <span className="w-[82px] font-black text-[15px] text-black shrink-0 tracking-tight">FACULTY:</span>
+              <span className="w-[80px] font-black text-[15px] text-black shrink-0 tracking-tight">FACULTY:</span>
               <span className="text-[15px] font-black text-black uppercase leading-[1.2] tracking-tight">{data.faculty || ''}</span>
             </div>
           </div>
@@ -156,7 +156,7 @@ const IDCard = ({ data }: { data: UserData }) => {
         </div>
 
         {/* Signature Area */}
-        <div className="absolute bottom-[35px] left-[50%] -translate-x-1/2 w-[330px] h-[47px] flex items-center justify-center p-1 z-30">
+        <div className="absolute bottom-[35px] left-[50%] -translate-x-1/2 w-[330px] h-[43px] flex items-center justify-center p-1 z-30">
           {data.signature && (
             <img 
               src={data.signature} 
