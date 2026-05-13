@@ -46,15 +46,15 @@ const IDCard = ({ data }: { data: UserData }) => {
         color: '#000000'
       }}
     >
-      {/* Header - Navy Purple Block with V-shape bottom */}
+      {/* Header - Navy Bold Block with V-shape bottom */}
       <div 
-        className="bg-[#1e1464] pt-5 pb-6 px-4 text-center relative"
+        className="bg-[#120a4d] pt-5 pb-6 px-4 text-center relative"
         style={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%, 50% 75%, 0 100%)' }}
       >
-        <h1 className="text-white font-black text-xl leading-none uppercase tracking-tighter m-0" style={{ fontSize: '20px' }}>
+        <h1 className="text-white font-black leading-none uppercase m-0 drop-shadow-sm" style={{ fontSize: '20px', wordSpacing: '4px', letterSpacing: '0.5px' }}>
           NIGERIA MARITIME UNIVERSITY
         </h1>
-        <h2 className="text-white font-black leading-none uppercase m-0 mt-1" style={{ fontSize: '18.5px' }}>
+        <h2 className="text-white font-black leading-none uppercase m-0 mt-1 drop-shadow-sm" style={{ fontSize: '18.5px', wordSpacing: '4px', letterSpacing: '0.2px' }}>
           OKERENKOKO, DELTA STATE
         </h2>
       </div>
@@ -102,21 +102,21 @@ const IDCard = ({ data }: { data: UserData }) => {
       </div>
 
       {/* Main Info Body */}
-      <div className="mt-0.5 pl-3 pr-5 relative h-[180px]">
+      <div className="mt-2 pl-3 pr-5 relative h-[180px]">
           {/* Exact Watermark "NMU" */}
           <div 
-            className="absolute top-[42%] left-[48%] -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none z-0 rotate-[-25deg]"
+            className="absolute top-[40%] left-[48%] -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none z-0 rotate-[-25deg]"
           >
             <span 
               className="font-black text-[#0a1d6e] opacity-[0.46]" 
-              style={{ fontSize: '119px', letterSpacing: '-5px', filter: 'blur(0.5px)' }}
+              style={{ fontSize: '110px', letterSpacing: '-5px', filter: 'blur(0.5px)' }}
             >
               NMU
             </span>
           </div>
 
           {/* Fields - Exact Labels and Layout */}
-          <div className="flex flex-col gap-[1.8px] relative z-10">
+          <div className="flex flex-col gap-[3px] relative z-10">
             <div className="flex items-start">
               <span className="w-[80px] font-black text-[15px] text-black shrink-0 tracking-tight">NAME:</span>
               <span className="text-[15px] font-black text-black uppercase break-words pr-2 tracking-tight">{data.name || ''}</span>
