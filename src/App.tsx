@@ -46,15 +46,15 @@ const IDCard = ({ data }: { data: UserData }) => {
         color: '#000000'
       }}
     >
-      {/* Header - Navy Bold Block with V-shape bottom */}
+      {/* Header - Navy Purple Block with V-shape bottom */}
       <div 
-        className="bg-[#120a4d] pt-5 pb-6 px-4 text-center relative"
+        className="bg-[#1e1464] pt-5 pb-6 px-4 text-center relative"
         style={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%, 50% 75%, 0 100%)' }}
       >
-        <h1 className="text-white font-black leading-none uppercase m-0 drop-shadow-sm" style={{ fontSize: '20px', wordSpacing: '4px', letterSpacing: '0.5px' }}>
+        <h1 className="text-white font-black text-xl leading-none uppercase tracking-tighter m-0" style={{ fontSize: '20px' }}>
           NIGERIA MARITIME UNIVERSITY
         </h1>
-        <h2 className="text-white font-black leading-none uppercase m-0 mt-1 drop-shadow-sm" style={{ fontSize: '18.5px', wordSpacing: '4px', letterSpacing: '0.2px' }}>
+        <h2 className="text-white font-black leading-none uppercase m-0 mt-1" style={{ fontSize: '18.5px' }}>
           OKERENKOKO, DELTA STATE
         </h2>
       </div>
